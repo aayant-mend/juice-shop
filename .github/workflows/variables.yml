@@ -22,7 +22,7 @@ jobs:
     - name: Using Variables
       run: |
         echo Print github.repository: ${{ github.repository }}
-        echo Print GITHUB_REF_NAME: $GITHUB_REF_NAME
+        echo Print GITHUB_REF_NAME: ${{ github.ref.name }}
         echo Print github.event.repository.name: ${{ github.event.repository.name }}
         
     
