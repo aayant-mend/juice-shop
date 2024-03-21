@@ -22,12 +22,12 @@ jobs:
     - name: Using Variables
       run: |
         echo Print github.repository: ${{ github.repository }}
-        echo Print GITHUB_REF_NAME: ${{ github.ref.name }}
+        echo Print GITHUB_REF_NAME: $GITHUB_REF_NAME
         echo Print github.event.repository.name: ${{ github.event.repository.name }}
         
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ github.event.repository.name }}:${{ github.ref.name }}
+      run: docker build . --file Dockerfile --tag ${{ github.event.repository.name }}:$GITHUB_REF_NAME
 
     - name: Print image name
       run: docker image ls
