@@ -27,7 +27,7 @@ jobs:
         
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ github.event.repository.name }}:${{ GITHUB_REF_NAME }}
+      run: docker build . --file Dockerfile --tag ${{ github.event.repository.name }}:${{ github.ref.name }}
 
     - name: Print image name
       run: docker image ls
