@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+
+  Mend-Image-Scan:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Printing variables
+      run: env | sort
+
+    - name: Using Variables
+      run: |
+        echo Print github.repository: ${{ github.repository }}
+        echo Print GITHUB_REF_NAME: ${{ github.GITHUB_REF_NAME }}
+        
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag juice-shop:latest
+    
+  
