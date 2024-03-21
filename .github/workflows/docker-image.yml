@@ -1,0 +1,37 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+
+  Mend-Image-Scan:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag juice-shop:latest
+    
+    - name: Download Mend CLI
+      run: |
+        echo "Downlaoding the CLI"
+        curl "https://downloads.mend.io/cli/linux_amd64/mend" -o /usr/local/bin/mend && chmod +x /usr/local/bin/mend
+        
+    - name: Print Mend CLI Version
+      run: |
+        echo "Verifying the CLI version"
+        mend version
+    - name: Run Mend CLI
+      run: |
+        mend image juice-shop:latest --scope "Aayans Sandbox//*//*" --non-interactive --local-pull
+      env:
+        MEND_USER_KEY: ${{ secrets.WS_USERKEY }}
+        MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
+        MEND_URL: ${{ secrets.MEND_URL }}
+        MEND_LOG_LEVEL: "DEBUG"
