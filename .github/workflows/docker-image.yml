@@ -11,7 +11,7 @@ jobs:
     
     env:
       LOCAL_IMAGE: ${{ github.event.repository.name }}:${{ github.ref_name }}
-      DOCKERHUB_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ ${{ github.event.repository.name }}:${{ github.run_id }}
+      DOCKERHUB_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.run_id }}
 
 
     steps:
