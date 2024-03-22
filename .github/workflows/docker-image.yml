@@ -13,7 +13,6 @@ jobs:
       LOCAL_IMAGE: ${{ github.event.repository.name }}:${{ github.ref_name }}
       DOCKERHUB_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.run_id }}
 
-
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
@@ -30,7 +29,7 @@ jobs:
         
     - name: Run Mend CLI
       run: |
-        mend image $LOCAL_IMAGE --scope "Aayans Sandbox//*//*" --non-interactive --local-pull
+        mend image $LOCAL_IMAGE --scope "${{ vars.MEND_ORG }}//*//*" --non-interactive --local-pull
       env:
         MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
         MEND_EMAIL: ${{ secrets.MEND_EMAIL }}
@@ -47,9 +46,6 @@ jobs:
       run: |
         # Rename image to contain Dockerhub prefix and replace tag with workflow run ID
         docker tag $LOCAL_IMAGE $DOCKERHUB_IMAGE
-        
-        echo "Print list of images"
-        docker image ls
 
         # Push image to private registry
         docker push $DOCKERHUB_IMAGE
@@ -58,11 +54,9 @@ jobs:
       run: |
         # Remove local images to force CLI to pull from private registry
         docker rmi -f $(docker images -aq)
-
-        echo "List local images:"
-        docker image ls
-
-        mend image $DOCKERHUB_IMAGE --scope "Aayans Sandbox//*//*" --non-interactive
+        
+        # Using the workflow run ID to ensure unique projects are created
+        mend image $DOCKERHUB_IMAGE --scope "${{ vars.MEND_ORG }}//*//${{ github.run_id }}" --non-interactive
 
       env:
         MEND_USER_KEY: ${{ secrets.MEND_USER_KEY }}
