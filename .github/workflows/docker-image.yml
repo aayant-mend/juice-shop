@@ -8,7 +8,7 @@ jobs:
   Mend-Image-Scan:
 
     runs-on: ubuntu-latest
-    
+
     env:
       LOCAL_IMAGE: ${{ github.event.repository.name }}:${{ github.ref_name }}
       DOCKERHUB_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ github.run_id }}
@@ -53,7 +53,7 @@ jobs:
     - name: Scan Dockerhub image 
       run: |
         # Remove local images to force CLI to pull from private registry
-        docker rmi -f $(docker images -aq)
+        docker rmi -f $(docker images -aq) > /dev/null
         
         # Using the workflow run ID to ensure unique projects are created
         mend image $DOCKERHUB_IMAGE --scope "${{ vars.MEND_ORG }}//*//${{ github.run_id }}" --non-interactive
