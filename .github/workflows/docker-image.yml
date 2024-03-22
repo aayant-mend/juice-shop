@@ -21,7 +21,7 @@ jobs:
     
     - name: Download Mend CLI
       run: |
-        echo "Downlaoding the CLI"
+        echo "Downloading the CLI"
         curl "https://downloads.mend.io/cli/linux_amd64/mend" -o /usr/local/bin/mend && chmod +x /usr/local/bin/mend
         
     - name: Print Mend CLI Version
@@ -57,7 +57,7 @@ jobs:
     - name: Scan Dockerhub image 
       run: |
         # Remove local images to force CLI to pull from private registry
-        docker rmi (docker image ls | awk '{print$1}')
+        docker rmi -f $(docker images -aq)
 
         echo "List local images:"
         docker image ls
